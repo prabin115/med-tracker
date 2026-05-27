@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+body {
+    background-color: #C1EBE9;
+}
+
+nav {
+    background-color: #9FCBAD;
+}
+
+form {
+    background-color: #9FCBAD;
+}
+
+input,
+select {
+    background-color: white;
+    border: none;
+    outline: none;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* input[type="number"] {
+    -moz-appearance: textfield;
+} */
