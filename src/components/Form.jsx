@@ -1,150 +1,71 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const Form = () => {
+const Form = ({ addCat, editingCat, setEditingCat, updateCat }) => {
   const [fileName, setFileName] = useState("Upload Cat Image");
   const [imagePreview, setImagePreview] = useState(null);
+  const [formData, setFormData] = useState(
+    editingCat || {
+    name: "",
+    age: "",
+    weight: "",
+    color: "",
+    gender: "",
+    image: null,
+  });
 
-  function handleImageChange(e) {
-    const file = e.target.files[0];
-    if(file) {
-      setFileName(file.name);
+  useEffect(() => {
+    if (editingCat) {
+      setFormData(editingCat);
 
-      const imageUrl = URL.createObjectURL(file);
-      setImagePreview(imageUrl);
+      if (editingCat.image) {
+        setImagePreview(
+          URL.createObjectURL(editingCat.image)
+        );
+      }
+    }
+  }, [editingCat]);
+  
+
+  function handleChange(e) {
+    const { name, value, files } = e.target;
+
+    if(files) {
+      const file = files[0];
+      
+      setFormData((prevData) => ({
+        ...prevData,
+        [name] : file,
+      }));
+
+      if(file) {
+        setFileName(file.name);
+
+        const imageURL = URL.createObjectURL(file);
+        setImagePreview(imageURL);
+      }
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name] : value,
+      }));
+    }
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    if(editingCat) {
+      updateCat(formData);
+    } else {
+      addCat(formData);
     }
   }
 
   return (
-    //  <div className='flex justify-center px-4 py-10'>
-    //   <form className="flex w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-sm">
-        
-    //     {/* Left Side */}
-    //     <div 
-    //       className="flex w-1/2 items-center justify-center bg-gray-100 p-6"
-    //       style={{
-    //         backgroundImage: imagePreview ? `url(${imagePreview})` : "none",
-    //         backgroundSize: "cover", 
-    //         backgroundPosition: "center",
-    //       }}
-    //     >
-          
-    //       <div className="flex h-full w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-300">
-            
-    //         <p className="mb-4 text-lg font-semibold">
-    //           {fileName}
-    //         </p>
-
-    //         {/* Hidden Input */}
-    //         <input
-    //           type="file"
-    //           accept="image/*"
-    //           id="image-upload"
-    //           className="hidden"
-    //           onChange={handleImageChange}
-    //         />
-
-    //         {/* Custom Button */}
-    //         <label
-    //           htmlFor="image-upload"
-    //           className="cursor-pointer rounded-xl bg-black px-5 py-3 text-white transition hover:opacity-80"
-    //         >
-    //           Choose Image
-    //         </label>
-
-    //       </div>
-
-    //     </div>
-
-    //     {/* Right Side */}
-    //     <div className="w-1/2 p-8">
-          
-    //       <h2 className="mb-6 text-2xl font-bold">
-    //         Pet Form
-    //       </h2>
-
-    //       {/* Name */}
-    //       <div className="mb-4">
-    //         <label className="mb-2 block text-sm font-medium">
-    //           Name
-    //         </label>
-
-    //         <input
-    //           type="text"
-    //           placeholder="Enter name"
-    //           className="w-full rounded-xl border px-4 py-3 outline-none focus:ring-2"
-    //         />
-    //       </div>
-
-    //       {/* Age */}
-    //       <div className="mb-4">
-    //         <label className="mb-2 block text-sm font-medium">
-    //           Age
-    //         </label>
-
-    //         <input
-    //           type="number"
-    //           step="0.1"
-    //           placeholder="years"
-    //           className="w-full rounded-xl border px-4 py-3 outline-none focus:ring-2"
-    //         />
-    //       </div>
-
-    //       {/* Weight */}
-    //       <div className="mb-4">
-    //         <label className="mb-2 block text-sm font-medium">
-    //           Weight
-    //         </label>
-
-    //         <input
-    //           type="number"
-    //           step="0.1"
-    //           placeholder="Kg"
-    //           className="w-full rounded-xl border px-4 py-3 outline-none focus:ring-2"
-    //         />
-    //       </div>
-
-    //       {/* Color */}
-    //       <div className="mb-4">
-    //         <label className="mb-2 block text-sm font-medium">
-    //           Color
-    //         </label>
-
-    //         <input
-    //           type="text"
-    //           placeholder="Enter color"
-    //           className="w-full rounded-xl border px-4 py-3 outline-none focus:ring-2"
-    //         />
-    //       </div>
-
-    //       {/* Gender */}
-    //       <div className="mb-6">
-    //         <label className="mb-2 block text-sm font-medium">
-    //           Gender
-    //         </label>
-
-    //         <select className="w-full rounded-xl border px-4 py-3 outline-none focus:ring-2">
-    //           <option value="">Select gender</option>
-    //           <option value="male">Male</option>
-    //           <option value="female">Female</option>
-    //         </select>
-    //       </div>
-
-    //       {/* Submit */}
-    //       <button
-    //         type="submit"
-    //         className="w-full rounded-xl bg-black py-3 font-medium text-white transition hover:opacity-80"
-    //       >
-    //         Submit
-    //       </button>
-
-    //     </div>
-
-    //   </form>
-
-    // </div>
     <div className='flex justify-center px-4 py-10'>
 
-      <form className="w-full max-w-md rounded-3xl bg-white p-8 shadow-sm">
+      <form 
+        onSubmit={handleSubmit}
+        className="w-full max-w-md rounded-3xl bg-white p-8 shadow-sm">
 
         <h2 className="mb-6 text-2xl font-bold">
           Pet Form
@@ -176,7 +97,8 @@ const Form = () => {
               type="file"
               accept="image/*"
               id="image-upload"
-              onChange={handleImageChange}
+              name='image'
+              onChange={handleChange}
               className="hidden"
             />
 
@@ -201,6 +123,9 @@ const Form = () => {
 
           <input
             type="text"
+            name='name'
+            value={formData.name}
+            onChange={handleChange}
             placeholder="Enter name"
             className="w-full rounded-xl border px-4 py-3 outline-none"
           />
@@ -215,6 +140,9 @@ const Form = () => {
           <input
             type="number"
             step="0.1"
+            name='age'
+            value={formData.age}
+            onChange={handleChange}
             placeholder="years"
             className="w-full rounded-xl border px-4 py-3 outline-none"
           />
@@ -229,6 +157,9 @@ const Form = () => {
           <input
             type="number"
             step="0.1"
+            name='weight'
+            value={formData.weight}
+            onChange={handleChange}
             placeholder="Kg"
             className="w-full rounded-xl border px-4 py-3 outline-none"
           />
@@ -242,6 +173,9 @@ const Form = () => {
 
           <input
             type="text"
+            name='color'
+            value={formData.color}
+            onChange={handleChange}
             placeholder="Enter color"
             className="w-full rounded-xl border px-4 py-3 outline-none"
           />
@@ -253,7 +187,11 @@ const Form = () => {
             Gender
           </label>
 
-          <select className="w-full rounded-xl border px-4 py-3 outline-none">
+          <select 
+            name='gender'
+            value={formData.gender}
+            onChange={handleChange}
+            className="w-full rounded-xl border px-4 py-3 outline-none">
             <option value="">Select gender</option>
             <option value="male">Male</option>
             <option value="female">Female</option>
