@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from 'react'
 
-const Form = ({ addCat, editingCat, setEditingCat, updateCat }) => {
-  const [fileName, setFileName] = useState("Upload Cat Image");
+const Form = ({ addCat, editingCat, updateCat, handleFormClose }) => {
+  
+  // this controls image file name to dynamically render the filename based on current state
+  const [fileName, setFileName] = useState("Upload Cat Image"); 
+  
+  // current image selected by the user
   const [imagePreview, setImagePreview] = useState(null);
+
+  // this represents our form fields
   const [formData, setFormData] = useState(
     editingCat || {
     name: "",
@@ -65,7 +71,13 @@ const Form = ({ addCat, editingCat, setEditingCat, updateCat }) => {
 
       <form 
         onSubmit={handleSubmit}
-        className="w-full max-w-md rounded-3xl bg-white p-8 shadow-sm">
+        className="relative w-full max-w-md rounded-3xl bg-white p-8 shadow-sm">
+        
+        <button 
+          onClick={handleFormClose}
+          className='absolute top-3 right-3 mt-5 mr-3 text-xl text-gray-500 hover:text-gray-900 transition duration-200'>
+          X
+        </button>
 
         <h2 className="mb-6 text-2xl font-bold">
           Pet Form

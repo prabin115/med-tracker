@@ -1,12 +1,12 @@
 import React from 'react'
 
-const CatCard = ({ cat, handleEdit }) => {
+const CatCard = ({ cat, handleEdit, handleAddMedicine }) => {
   return (
     <div className="w-[340px] overflow-hidden rounded-md bg-white shadow-md">
       
       {/* Image */}
       <img
-        src={URL.createObjectURL(cat.image)}
+        src={cat.image ? URL.createObjectURL(cat.image) : "/placeholder-cat.png"}
         alt="cat"
         className="h-[220px] w-full object-cover"
       />
@@ -21,15 +21,25 @@ const CatCard = ({ cat, handleEdit }) => {
             </h2>
 
             <p className="text-sm text-gray-500">
-              {cat.gender} Cat
+              {cat.gender} cat
             </p>
           </div>
 
-          <button 
-            onClick={() => handleEdit(cat)}
-            className="rounded-lg bg-black px-3 py-1 text-sm text-white transition hover:opacity-80">
-            Edit
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={() => handleEdit(cat)}
+              className="rounded-lg bg-black px-3 py-1 text-sm text-white transition hover:opacity-80"
+            >
+              Edit
+            </button>
+
+            <button
+              onClick={() => handleAddMedicine(cat)}
+              className="rounded-lg bg-blue-600 px-3 py-1 text-sm text-white transition hover:opacity-80"
+            >
+              <i className="fa-solid fa-briefcase-medical"></i>
+            </button>
+          </div>
         </div>
 
         {/* Details */}

@@ -2,12 +2,82 @@ import { useState } from "react"
 import CatCard from "./components/CatCard"
 import Form from "./components/Form"
 import Navbar from "./components/Navbar"
+import MedicineForm from "./components/MedicineForm";
 
 function App() {
-  const [showForm, setShowForm] = useState(false);
-  const [cats, setCats] = useState([]);
-  const [editingCat, setEditingCat] = useState(null);
 
+  const catsdemo = [
+    {
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },
+    {
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },
+    {
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },
+    {
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },{
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },
+    {
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },
+    {
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },
+    {
+      name: "Tyson",
+      age: "1.8",
+      weight: "4.4",
+      color: "Orange",
+      gender: "male",
+      image: null,
+    },
+  ];
+
+  const [showForm, setShowForm] = useState(false); // controls form
+  const [cats, setCats] = useState([]); // Array of cat objects
+  const [editingCat, setEditingCat] = useState(null); // current cat object which is being editied
+
+  const [showMedicineForm, setMedicineForm] = useState(false);
+  const [selectedCat, setSelectedCat] = useState(null);
   
   function addCat(catData) {
     const newCat = {
@@ -32,27 +102,47 @@ function App() {
     setShowForm(false);
   }
 
+  function handleFormClose() {
+    setShowForm(false);
+    setEditingCat(null);
+  }
+
+  function handleAddMedicine(cat) {
+    setSelectedCat(cat);
+    setMedicineForm(true);
+  }
+
+  function handleMedicineFormClose() {
+    setMedicineForm(false);
+    setSelectedCat(null);
+  }
+
   return (
     <>
       <Navbar setShowForm={setShowForm} />
-      
       {showForm && <Form 
         addCat={addCat} 
         updateCat={updateCat}
         editingCat={editingCat} 
-        setEditingCat={setEditingCat}
+        handleFormClose={handleFormClose}
       />}
 
-      <div className="flex flex-wrap gap-4 p-4">
-        {cats.map((cat) => (
-          <CatCard 
+      {showMedicineForm && <MedicineForm 
+        handleMedicineFormClose={handleMedicineFormClose}
+      />}
+
+      {!showForm && !showMedicineForm && 
+        <div className="grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center p-4 max-w-7xl mx-auto">
+          {cats.map((cat) => (
+            <CatCard 
             key={cat.id} 
             cat={cat} 
             handleEdit={handleEdit} 
-            
-          />
-        ))}
-      </div>
+            handleAddMedicine={handleAddMedicine}
+            />
+          ))}
+        </div>
+      }
     </>
   )
 }
