@@ -22,12 +22,7 @@ const Form = ({ addCat, editingCat, updateCat, handleFormClose }) => {
   useEffect(() => {
     if (editingCat) {
       setFormData(editingCat);
-
-      if (editingCat.image) {
-        setImagePreview(
-          URL.createObjectURL(editingCat.image)
-        );
-      }
+      setImagePreview(editingCat.imageUrl);
     }
   }, [editingCat]);
   
@@ -45,7 +40,6 @@ const Form = ({ addCat, editingCat, updateCat, handleFormClose }) => {
 
       if(file) {
         setFileName(file.name);
-
         const imageURL = URL.createObjectURL(file);
         setImagePreview(imageURL);
       }
@@ -59,10 +53,18 @@ const Form = ({ addCat, editingCat, updateCat, handleFormClose }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
+
+    const catData = {
+    ...formData,
+    imageUrl: formData.image
+      ? URL.createObjectURL(formData.image)
+      : formData.imageUrl,
+    };
+
     if(editingCat) {
-      updateCat(formData);
+      updateCat(catData);
     } else {
-      addCat(formData);
+      addCat(catData);
     }
   }
 

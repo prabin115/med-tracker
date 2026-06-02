@@ -1,31 +1,46 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-const MedicineForm = ({ handleMedicineFormClose }) => {
+const MedicineForm = ({ handleMedicineFormClose, addMedicine, selectedCat, editingMedicine }) => {
 
-    const [formData, setFormData] = useState({
-        medicineName: "",
-        dosage: "",
-        dosageUnit: "mg",
-        frequency: "",
-        startDate: "",
-        endDate: "",
-        timing: "",
-        notes: "",
-        doctorName: "",
-    });
-    function handleChange(e) {
-        const { name, value } = e.target;
+  const [formData, setFormData] = useState(
+    editingMedicine || {
+      medicineName: "",
+      dosage: "",
+      dosageUnit: "mg",
+      frequency: "",
+      startDate: "",
+      endDate: "",
+      timing: "",
+      notes: "",
+      doctorName: "",
+  });
 
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
+  useEffect(() => {
+    if(editingMedicine) {
+      setFormData(editingMedicine);
     }
+  }, [editingMedicine])
+  
+  function handleChange(e) {
+      const { name, value } = e.target;
+
+      setFormData((prev) => ({
+          ...prev,
+          [name]: value,
+      }));
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    addMedicine(selectedCat.id, formData)
+  }
 
   return (
     <>
     <div className="flex justify-center px-4 py-10 min-h-screen">
-      <form className="relative w-full max-w-xl rounded-3xl bg-white p-8 shadow-md">
+      <form 
+        onSubmit={handleSubmit}
+        className="relative w-full max-w-xl rounded-3xl bg-white p-8 shadow-md">
         <button 
             onClick={handleMedicineFormClose}
             className='absolute top-3 right-3 mt-5 mr-3 text-xl text-gray-500 hover:text-gray-900 transition duration-200'>

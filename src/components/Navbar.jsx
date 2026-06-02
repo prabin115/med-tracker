@@ -5,7 +5,7 @@ const Navbar = ({ setShowForm }) => {
     <>
     <nav className="mx-auto mt-4 w-[90%] flex justify-between items-center rounded-2xl bg-white px-6 py-4 shadow-sm">
         <div className="text-2xl font-bold tracking-tight">
-          Paw
+          Med <i className="fa-solid fa-cat"></i> Tracker
         </div>
 
         <button 

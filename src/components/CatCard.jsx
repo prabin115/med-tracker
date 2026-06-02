@@ -1,66 +1,104 @@
 import React from 'react'
+import MedicineCard from './MedicineCard';
 
-const CatCard = ({ cat, handleEdit, handleAddMedicine }) => {
+const CatCard = ({ cat, handleEdit, handleAddMedicine, handleEditMedicine, editingMedicine }) => {
   return (
-    <div className="w-[340px] overflow-hidden rounded-md bg-white shadow-md">
-      
-      {/* Image */}
-      <img
-        src={cat.image ? URL.createObjectURL(cat.image) : "/placeholder-cat.png"}
-        alt="cat"
-        className="h-[220px] w-full object-cover"
-      />
+    <div className="bg-white rounded-2xl shadow-md overflow-hidden">
 
-      {/* Content */}
-      <div className="p-5">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_1.5fr]">
 
-        <div className="mb-4 flex items-start justify-between">
-          <div>
-            <h2 className="text-2xl font-bold">
+        {/* LEFT SIDE */}
+
+        <div className="p-6 border-r">
+
+          <img
+            src={cat.imageUrl}
+            alt={cat.name}
+            className="w-full h-72 object-contain rounded-xl"
+          />
+
+          <div className="mt-4">
+            <h2 className="text-3xl font-bold">
               {cat.name}
             </h2>
 
-            <p className="text-sm text-gray-500">
-              {cat.gender} cat
+            <p className="text-gray-500">
+              {cat.gender} Cat
             </p>
+
+            <div className="mt-4 space-y-2">
+              <p>
+                <strong>Age:</strong> {cat.age}
+              </p>
+
+              <p>
+                <strong>Weight:</strong> {cat.weight} kg
+              </p>
+
+              <p>
+                <strong>Color:</strong> {cat.color}
+              </p>
+            </div>
           </div>
 
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleEdit(cat)}
-              className="rounded-lg bg-black px-3 py-1 text-sm text-white transition hover:opacity-80"
-            >
-              Edit
-            </button>
+          <button
+            onClick={() => handleEdit(cat)}
+            className="mt-4 bg-black text-white px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-800"
+          >
+            {/* Edit Cat */}
+            <i className="fa-regular fa-pen-to-square"></i>
+          </button>
+
+          <button className='mt-4 ml-3 bg-black text-white px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-800'>
+            <i className="fa-solid fa-trash"></i>
+          </button>
+
+        </div>
+
+        {/* RIGHT SIDE */}
+
+        <div className="p-6">
+
+          <div className="flex justify-between items-center mb-4">
+
+            <h3 className="text-xl font-semibold">
+              Medicines
+            </h3>
 
             <button
               onClick={() => handleAddMedicine(cat)}
-              className="rounded-lg bg-blue-600 px-3 py-1 text-sm text-white transition hover:opacity-80"
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-400 transition-colors duration-200"
             >
-              <i className="fa-solid fa-briefcase-medical"></i>
+              + Add Medicine
             </button>
+
           </div>
-        </div>
 
-        {/* Details */}
-        <div className="space-y-2 text-sm text-gray-700">
-          <p>
-            <span className="font-semibold">Age:</span> {cat.age} years
-          </p>
+          {cat.medicines?.length === 0 && (
+            <p className="text-gray-500">
+              No medicines added.
+            </p>
+          )}
 
-          <p>
-            <span className="font-semibold">Weight:</span> {cat.weight} kg
-          </p>
+          <div className="space-y-3">
 
-          <p>
-            <span className="font-semibold">Color:</span> {cat.color}
-          </p>
+            {cat.medicines?.map((medicine) => (
+              <MedicineCard
+                key={medicine.id}
+                medicine={medicine}
+                catId={cat.id}
+                handleEditMedicine={handleEditMedicine}
+              />
+            ))}
+
+          </div>
+
         </div>
 
       </div>
 
     </div>
-  )
-}
+  );
+};
 
 export default CatCard
