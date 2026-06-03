@@ -1,11 +1,15 @@
 import React from 'react'
 
-const MedicineCard = ({ medicine, handleEditMedicine, catId }) => {
+const MedicineCard = ({ medicine, handleEditMedicine, catId, deleteMedicine }) => {
   
-  function handleEdit(e) {
-    e.preventDefault();
+  function handleEdit() {
     console.log('edit');
     handleEditMedicine(catId, medicine);
+  }
+
+  function handleDelete() {
+    console.log('delete medicine')
+    deleteMedicine(catId, medicine.id)
   }
 
   return (
@@ -14,12 +18,22 @@ const MedicineCard = ({ medicine, handleEditMedicine, catId }) => {
       {/* Edit button */}
       <button 
         onClick={handleEdit}
-        className='absolute top-3 right-3'>
+        className='absolute top-3 right-3 hover:text-gray-500 transition:color duration-200'>
         <i className="fa-regular fa-pen-to-square"></i>
       </button>
 
       {/* Delete button */}
-      <button className='absolute top-3 right-10'>
+      <button 
+        onClick={() => {
+          const confirmed = window.confirm(
+            "Are you sure you want to delete this medicine?"
+          )
+
+          if(confirmed) {
+            handleDelete()
+          }
+        }}
+        className='absolute top-3 right-10 hover:text-gray-500 transition:color duration-200'>
         <i className="fa-solid fa-trash"></i>
       </button>
       

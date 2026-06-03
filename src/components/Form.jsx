@@ -54,17 +54,17 @@ const Form = ({ addCat, editingCat, updateCat, handleFormClose }) => {
   function handleSubmit(e) {
     e.preventDefault();
 
-    const catData = {
-    ...formData,
-    imageUrl: formData.image
-      ? URL.createObjectURL(formData.image)
-      : formData.imageUrl,
-    };
+    // const catData = {
+    // ...formData,
+    // imageUrl: formData.image
+    //   ? URL.createObjectURL(formData.image)
+    //   : formData.imageUrl,
+    // };
 
     if(editingCat) {
-      updateCat(catData);
+      updateCat(formData);
     } else {
-      addCat(catData);
+      addCat(formData);
     }
   }
 
@@ -157,6 +157,7 @@ const Form = ({ addCat, editingCat, updateCat, handleFormClose }) => {
             name='age'
             value={formData.age}
             onChange={handleChange}
+            onWheel={(e) => e.target.blur()}
             placeholder="years"
             className="w-full rounded-xl border px-4 py-3 outline-none"
           />
@@ -173,6 +174,7 @@ const Form = ({ addCat, editingCat, updateCat, handleFormClose }) => {
             step="0.1"
             name='weight'
             value={formData.weight}
+            onWheel={(e) => e.target.blur()}
             onChange={handleChange}
             placeholder="Kg"
             className="w-full rounded-xl border px-4 py-3 outline-none"

@@ -1,7 +1,15 @@
 import React from 'react'
 import MedicineCard from './MedicineCard';
 
-const CatCard = ({ cat, handleEdit, handleAddMedicine, handleEditMedicine, editingMedicine }) => {
+const CatCard = ({ 
+  cat, 
+  handleEdit, 
+  handleAddMedicine, 
+  handleEditMedicine, 
+  editingMedicine,
+  deleteMedicine,
+  deleteCat
+  }) => {
   return (
     <div className="bg-white rounded-2xl shadow-md overflow-hidden">
 
@@ -49,7 +57,17 @@ const CatCard = ({ cat, handleEdit, handleAddMedicine, handleEditMedicine, editi
             <i className="fa-regular fa-pen-to-square"></i>
           </button>
 
-          <button className='mt-4 ml-3 bg-black text-white px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-800'>
+          <button 
+            onClick={() => {
+              const confirmed = window.confirm(
+                "Are you sure you want to delete this cat?"
+              );
+
+              if(confirmed) {
+                deleteCat(cat.id);
+              }
+            }}
+            className='mt-4 ml-3 bg-black text-white px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-800'>
             <i className="fa-solid fa-trash"></i>
           </button>
 
@@ -88,6 +106,7 @@ const CatCard = ({ cat, handleEdit, handleAddMedicine, handleEditMedicine, editi
                 medicine={medicine}
                 catId={cat.id}
                 handleEditMedicine={handleEditMedicine}
+                deleteMedicine={deleteMedicine}
               />
             ))}
 

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import CatCard from "./components/CatCard"
 import Form from "./components/Form"
 import Navbar from "./components/Navbar"
@@ -9,7 +9,15 @@ function App() {
 
   const [showForm, setShowForm] = useState(false); // controls form
 
-  const [cats, setCats] = useState([]); // Array of cat objects
+  const [cats, setCats] = useState(() => {
+    const savedCats = localStorage.getItem("cats");
+    return savedCats ? JSON.parse(savedCats) : [];
+  }); // Array of cat objects
+
+  useEffect(() => {
+    console.log("Saving cats:", cats);
+    localStorage.setItem("cats", JSON.stringify(cats));
+  }, [cats]);
 
   const [editingCat, setEditingCat] = useState(null); // current cat object which is being editied
 
@@ -22,15 +30,37 @@ function App() {
   const [selectedCatId, setSelectedCatId] = useState(null);
   
   function addCat(catData) {
-    const newCat = {
-      ...catData,
-      id: crypto.randomUUID(),
-      imageUrl: catData.image ? URL.createObjectURL(catData.image) : null,
-      medicines: [],
+    if (!catData.image) {
+      const newCat = {
+        ...catData,
+        id: crypto.randomUUID(),
+        imageUrl: null,
+        medicines: [],
+      };
+
+      setCats(prev => [...prev, newCat]);
+      setShowForm(false);
+      return;
     }
-    console.log(newCat)
-    setCats((prevCats) => [...prevCats, newCat]);
+    
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const base64Image = reader.result; 
+      const { image, ...rest } = catData;
+
+      const newCat = {
+        ...rest,
+        id: crypto.randomUUID(),
+        imageUrl: base64Image,
+        medicines: [],
+      };
+
+      console.log(newCat)
+      setCats((prevCats) => [...prevCats, newCat]);
+    }
     setShowForm(false);
+    reader.readAsDataURL(catData.image);
   }
 
   function handleEdit(cat) {
@@ -39,12 +69,47 @@ function App() {
   }
 
   function updateCat(updatedCat) {
-    setCats((prevCats) =>
-      prevCats.map((cat) => 
-        cat.id === updatedCat.id ? updatedCat : cat)
-    );
+    if (!(updatedCat.image instanceof File)) {
+      setCats(prevCats =>
+        prevCats.map(cat =>
+          cat.id === updatedCat.id ? updatedCat : cat
+        )
+      );
+
+      setEditingCat(null);
+      setShowForm(false);
+      return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const { image, ...rest } = updatedCat;
+
+      const catWithNewImage = {
+        ...rest,
+        imageUrl: reader.result,
+      };
+
+      setCats(prevCats =>
+        prevCats.map(cat =>
+          cat.id === catWithNewImage.id
+            ? catWithNewImage
+            : cat
+        )
+      );
+
     setEditingCat(null);
     setShowForm(false);
+  };
+
+  reader.readAsDataURL(updatedCat.image);
+  }
+
+  function deleteCat(catId) {
+    setCats(prevCats =>
+      prevCats.filter(cat => cat.id !== catId)
+    );
   }
 
   function handleFormClose() {
@@ -78,6 +143,40 @@ function App() {
     setShowMedicineForm(false);
   }
 
+  function updateMedicine(catId, medicineData) {
+    setCats(prevCats => 
+      prevCats.map(cat => 
+        cat.id === catId 
+          ? {
+            ...cat,
+            medicines: cat.medicines.map(medicine =>
+              medicine.id === medicineData.id 
+                ? medicineData
+                : medicine
+            )
+          }
+          : cat
+      )
+    )
+    setEditingMedicine(null);
+    setShowMedicineForm(false);
+  }
+
+  function deleteMedicine(catId, medicineId) {
+    setCats(prevCats =>
+      prevCats.map(cat =>
+        cat.id === catId 
+        ? {
+          ...cat,
+          medicines : cat.medicines.filter(
+            medicine => medicine.id !== medicineId
+          )
+        } 
+        : cat
+      )
+    );
+  }
+
   function handleEditMedicine(catId, medicine) {
     setSelectedCatId(catId);
     setEditingMedicine(medicine);
@@ -99,11 +198,13 @@ function App() {
         handleMedicineFormClose={handleMedicineFormClose}
         addMedicine={addMedicine}
         selectedCat={selectedCat}
+        selectedCatId={selectedCatId}
         editingMedicine={editingMedicine}
+        updateMedicine={updateMedicine}
       />}
 
       {!showForm && !showMedicineForm && 
-        <div className="flex flex-col gap-5 p-5 w-[80%] mx-auto">
+        <div className="flex flex-col gap-5 p-5 w-[70%] mx-auto">
           {cats.map((cat) => (
             <CatCard 
             key={cat.id} 
@@ -112,6 +213,8 @@ function App() {
             handleAddMedicine={handleAddMedicine}
             handleEditMedicine={handleEditMedicine}
             editingMedicine={editingMedicine}
+            deleteMedicine={deleteMedicine}
+            deleteCat={deleteCat}
             />
           ))}
         </div>

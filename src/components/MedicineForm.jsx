@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react'
 
-const MedicineForm = ({ handleMedicineFormClose, addMedicine, selectedCat, editingMedicine }) => {
+const MedicineForm = ({ 
+  handleMedicineFormClose, 
+  addMedicine, 
+  selectedCat, 
+  editingMedicine,
+  updateMedicine,
+  selectedCatId
+  }) => {
 
   const [formData, setFormData] = useState(
     editingMedicine || {
       medicineName: "",
       dosage: "",
-      dosageUnit: "mg",
+      dosageUnit: "ml",
       frequency: "",
       startDate: "",
       endDate: "",
@@ -32,7 +39,11 @@ const MedicineForm = ({ handleMedicineFormClose, addMedicine, selectedCat, editi
 
   function handleSubmit(e) {
     e.preventDefault();
-    addMedicine(selectedCat.id, formData)
+
+    if(editingMedicine)
+      updateMedicine(selectedCatId, formData);
+    else
+      addMedicine(selectedCatId, formData)
   }
 
   return (
@@ -88,8 +99,8 @@ const MedicineForm = ({ handleMedicineFormClose, addMedicine, selectedCat, editi
               onChange={handleChange}
               className="rounded-xl border px-4 py-3 outline-none"
             >
-              <option value="mg">mg</option>
               <option value="ml">ml</option>
+              <option value="mg">mg</option>
               <option value="tablet">Tablet</option>
               <option value="capsule">Capsule</option>
             </select>
