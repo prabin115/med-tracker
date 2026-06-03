@@ -119,6 +119,7 @@ function App() {
 
   function handleAddMedicine(cat) {
     setSelectedCat(cat);
+    setSelectedCatId(cat.id);
     setShowMedicineForm(true);
   }
 
@@ -204,17 +205,17 @@ function App() {
       />}
 
       {!showForm && !showMedicineForm && 
-        <div className="flex flex-col gap-5 p-5 w-[70%] mx-auto">
+        <div className="flex flex-col gap-5 p-5 w-full sm:w-[90%] md:w-[75%] lg:w-[60%] mx-auto">
           {cats.map((cat) => (
             <CatCard 
-            key={cat.id} 
-            cat={cat} 
-            handleEdit={handleEdit} 
-            handleAddMedicine={handleAddMedicine}
-            handleEditMedicine={handleEditMedicine}
-            editingMedicine={editingMedicine}
-            deleteMedicine={deleteMedicine}
-            deleteCat={deleteCat}
+              key={cat.id} 
+              cat={cat} 
+              handleEdit={handleEdit} 
+              handleAddMedicine={handleAddMedicine}
+              handleEditMedicine={handleEditMedicine}
+              editingMedicine={editingMedicine}
+              deleteMedicine={deleteMedicine}
+              deleteCat={deleteCat}
             />
           ))}
         </div>

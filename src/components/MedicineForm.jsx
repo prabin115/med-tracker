@@ -83,7 +83,7 @@ const MedicineForm = ({
             Dosage
           </label>
 
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row gap-3">
             <input
               type="number"
               name="dosage"

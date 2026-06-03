@@ -13,12 +13,12 @@ const MedicineCard = ({ medicine, handleEditMedicine, catId, deleteMedicine }) =
   }
 
   return (
-    <div className="relative border rounded-xl p-4 bg-gray-50">
+    <div className="relative border rounded-xl p-4 pb-12 bg-gray-50">
       
       {/* Edit button */}
       <button 
         onClick={handleEdit}
-        className='absolute top-3 right-3 hover:text-gray-500 transition:color duration-200'>
+        className='absolute bottom-3 right-3 hover:text-gray-500 transition-color duration-200'>
         <i className="fa-regular fa-pen-to-square"></i>
       </button>
 
@@ -33,7 +33,7 @@ const MedicineCard = ({ medicine, handleEditMedicine, catId, deleteMedicine }) =
             handleDelete()
           }
         }}
-        className='absolute top-3 right-10 hover:text-gray-500 transition:color duration-200'>
+        className='absolute bottom-3 right-10 hover:text-gray-500 transition-color duration-200'>
         <i className="fa-solid fa-trash"></i>
       </button>
       
@@ -69,9 +69,12 @@ const MedicineCard = ({ medicine, handleEditMedicine, catId, deleteMedicine }) =
         Timing: {medicine.timing}
       </p>
 
-      <p className='bg-red-200 mt-2'>
-        Notes: {medicine.notes}
-      </p>
+      <div className="mt-4 rounded-lg bg-pink-100 p-3">
+        <p className="font-medium mb-1">Notes</p>
+        <p className="text-sm break-words">
+          {medicine.notes || "No notes"}
+        </p>
+      </div>
 
     </div>
   )

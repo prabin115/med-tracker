@@ -17,12 +17,12 @@ const CatCard = ({
 
         {/* LEFT SIDE */}
 
-        <div className="p-6 border-r">
+        <div className="justify-center items-center flex flex-col p-6 border-r md:border-r border-r-0 md:border-r">
 
           <img
             src={cat.imageUrl}
             alt={cat.name}
-            className="w-full h-72 object-contain rounded-xl"
+            className="w-full h-48 sm:h-60 md:h-72 object-contain rounded-xl"
           />
 
           <div className="mt-4">
@@ -49,27 +49,29 @@ const CatCard = ({
             </div>
           </div>
 
-          <button
-            onClick={() => handleEdit(cat)}
-            className="mt-4 bg-black text-white px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-800"
-          >
-            {/* Edit Cat */}
-            <i className="fa-regular fa-pen-to-square"></i>
-          </button>
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={() => handleEdit(cat)}
+              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              <i className="fa-regular fa-pen-to-square"></i>
+            </button>
 
-          <button 
-            onClick={() => {
-              const confirmed = window.confirm(
-                "Are you sure you want to delete this cat?"
-              );
+            <button
+              onClick={() => {
+                const confirmed = window.confirm(
+                  "Are you sure you want to delete this cat?"
+                );
 
-              if(confirmed) {
-                deleteCat(cat.id);
-              }
-            }}
-            className='mt-4 ml-3 bg-black text-white px-4 py-2 rounded-lg transition-colors duration-200 hover:bg-gray-800'>
-            <i className="fa-solid fa-trash"></i>
-          </button>
+                if (confirmed) {
+                  deleteCat(cat.id);
+                }
+              }}
+              className="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors"
+            >
+              <i className="fa-solid fa-trash"></i>
+            </button>
+          </div>
 
         </div>
 
@@ -77,7 +79,7 @@ const CatCard = ({
 
         <div className="p-6">
 
-          <div className="flex justify-between items-center mb-4">
+          <div className="flex flex-col sm:flex-row gap-3 sm:justify-between sm:items-center mb-4">
 
             <h3 className="text-xl font-semibold">
               Medicines
